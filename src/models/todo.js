@@ -1,16 +1,20 @@
 const mongoose = require('mongoose');
 
 const todoSchema = new mongoose.Schema({
-    title: {
+    hari: {
         type: String,
-        required: true,
+        enum: ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'],
+        required: [true, 'Hari harus diisi'],
     },
-    description: {
+    mataKuliah: {
         type: String,
+        required: [true, 'Mata kuliah harus diisi'],
+        trim: true
     },
-    completed: {
-        type: Boolean,
-        default: false,
+    waktu: {
+        type: String,
+        required: [true, 'Waktu harus diisi'],
+        trim: true
     },
     userId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -18,7 +22,10 @@ const todoSchema = new mongoose.Schema({
         required: true,
     },
 }, {
-    timestamps: true,
+    timestamps: true
 });
+
+// Menambahkan index untuk meningkatkan performa query
+todoSchema.index({ userId: 1, hari: 1 });
 
 module.exports = mongoose.model('Todo', todoSchema);
